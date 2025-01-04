@@ -18,3 +18,31 @@ class UserSaver(Protocol):
     @abstractmethod
     async def save(self, user: User) -> None:
         raise NotImplementedError
+
+
+class PasswordHasher(Protocol):
+    @abstractmethod
+    def hash(self, raw_password: str) -> bytes:
+        raise NotImplementedError
+
+    @abstractmethod
+    def verify(self, raw_password: str, hashed_password: str) -> bool:
+        raise NotImplementedError
+
+
+class JwtService(Protocol):
+    @abstractmethod
+    def create_jwt(self, payload: dict, expiration_time: int, token_type: str) -> str:
+        raise NotImplementedError
+
+    @abstractmethod
+    def create_access_token(self, user: User) -> str:
+        raise NotImplementedError
+
+    @abstractmethod
+    def create_refresh_token(self, user: User) -> str:
+        raise NotImplementedError
+
+    @abstractmethod
+    def verify_token(self, token: str) -> dict:
+        raise NotImplementedError

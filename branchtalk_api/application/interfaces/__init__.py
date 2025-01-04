@@ -1,8 +1,6 @@
-from .comment import CommentDeleter, CommentReader, CommentSaver, CommentUpdater
-from .jwt_service import JwtService
-from .password_hasher import PasswordHasher
-from .post import PostDeleter, PostReader, PostSaver, PostUpdater
-from .user import UserReader, UserSaver
+from branchtalk_api.application.interfaces.comment import CommentDeleter, CommentReader, CommentSaver, CommentUpdater
+from branchtalk_api.application.interfaces.post import PostDeleter, PostReader, PostSaver, PostUpdater
+from branchtalk_api.application.interfaces.user import JwtService, PasswordHasher, UserReader, UserSaver
 
 __all__ = [
     'CommentDeleter',

@@ -13,7 +13,6 @@ from branchtalk_api.application.use_cases.comment import (
     DeleteCommentInteractor,
     UpdateCommentInteractor,
 )
-from branchtalk_api.application.use_cases.login import LoginInteractor
 from branchtalk_api.application.use_cases.post import (
     CreatePostInteractor,
     DeletePostInteractor,
@@ -21,8 +20,7 @@ from branchtalk_api.application.use_cases.post import (
     PostUpdateManager,
     UpdatePostInteractor,
 )
-from branchtalk_api.application.use_cases.refresh import RefreshInteractor
-from branchtalk_api.application.use_cases.registration import RegistrationInteractor
+from branchtalk_api.application.use_cases.user import LoginInteractor, RefreshInteractor, RegistrationInteractor
 from branchtalk_api.config import Config
 from branchtalk_api.infrastructure.data_mappers.comment import CommentDataMapper
 from branchtalk_api.infrastructure.data_mappers.post import PostDataMapper
@@ -45,8 +43,8 @@ class AppProvider(Provider):
         return JwtService(
             secret_key=config.access_config.secrete,
             algorithm=config.access_config.algorithm,
-            expiration_access=config.access_config.access_token_lifetime_seconds,
-            expiration_refresh=config.access_config.refresh_token_lifetime_second,
+            expiration_access=config.access_config.access_token_lifetime_sec,
+            expiration_refresh=config.access_config.refresh_token_lifetime_sec,
         )
 
     @provide(scope=Scope.APP)
@@ -71,7 +69,9 @@ class AppProvider(Provider):
 
     user_data_mapper = provide(UserDataMapper, scope=Scope.REQUEST)
     user_repo = provide(
-        UserRepository, scope=Scope.REQUEST, provides=AnyOf[interfaces.UserReader, interfaces.UserSaver]
+        UserRepository,
+        scope=Scope.REQUEST,
+        provides=AnyOf[interfaces.UserReader, interfaces.UserSaver],
     )
 
     post_data_mapper = provide(PostDataMapper, scope=Scope.REQUEST)

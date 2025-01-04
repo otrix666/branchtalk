@@ -1,16 +1,15 @@
-import enum
 from datetime import datetime, timedelta
+from enum import StrEnum
 
 import jwt
 
-from branchtalk_api.application import interfaces
-from branchtalk_api.application.exceptions.jwt import ExpiredJwt, InvalidJwt
+from branchtalk_api.application import exceptions, interfaces
 from branchtalk_api.domain.entities.users import User
 
 TOKEN_TYPE_FIELD = 'type'
 
 
-class TokenType(str, enum.Enum):
+class TokenType(StrEnum):
     ACCESS_TOKEN = 'access'
     REFRESH_TOKEN = 'refresh'
 
@@ -29,10 +28,8 @@ class JwtService(interfaces.JwtService):
         self._expiration_refresh = expiration_refresh
 
     def create_jwt(self, payload: dict, expiration_time: int, token_type: str) -> str:
-        iat = datetime.now()
-        exp = iat + timedelta(seconds=expiration_time)
-
-        payload.update({'iat': iat, 'exp': exp, TOKEN_TYPE_FIELD: token_type})
+        exp = datetime.now() + timedelta(seconds=expiration_time)
+        payload.update({'exp': exp, TOKEN_TYPE_FIELD: token_type})
 
         token = jwt.encode(payload, self._secret_key, algorithm=self._algorithm)
         return token
@@ -59,10 +56,12 @@ class JwtService(interfaces.JwtService):
         )
 
     def verify_token(self, token: str) -> dict:
+        print(token)
         try:
             payload = jwt.decode(token, self._secret_key, algorithms=[self._algorithm])
             return payload
         except jwt.ExpiredSignatureError:
-            raise ExpiredJwt(token)
-        except jwt.InvalidTokenError:
-            raise InvalidJwt(token)
+            raise exceptions.ExpiredJwt(token)
+        except jwt.InvalidTokenError as e:
+            print(e)
+            raise exceptions.InvalidJwt(token)

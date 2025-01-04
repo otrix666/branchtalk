@@ -1,6 +1,6 @@
 from pydantic import BaseModel
 
-from branchtalk_api.application.dto.user import UserCreateDTO, UserLoginDTO
+from branchtalk_api.application.dto.user import RefreshDTO, UserCreateDTO, UserLoginDTO
 
 
 class UserLogin(BaseModel):
@@ -24,4 +24,13 @@ class UserCreate(BaseModel):
             username=self.username,
             email=self.email,
             password=self.password,
+        )
+
+
+class RefreshToken(BaseModel):
+    refresh_token: str
+
+    def to_dto(self) -> RefreshDTO:
+        return RefreshDTO(
+            refresh_token=self.refresh_token,
         )

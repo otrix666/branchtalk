@@ -1,6 +1,11 @@
-from .comment import CommentNotFoundById, CommentNotFoundForUser
-from .post import PostNotFoundById, PostNotFoundForUser
-from .user import EmailAlreadyExists, UsernameAlreadyExists, UserNotFoundById, UserNotFoundByUsername
+from branchtalk_api.domain.exceptions.comment import CommentNotFoundById, CommentNotFoundForUser
+from branchtalk_api.domain.exceptions.post import PostNotFoundById, PostNotFoundForUser
+from branchtalk_api.domain.exceptions.user import (
+    EmailAlreadyExists,
+    UsernameAlreadyExists,
+    UserNotFoundById,
+    UserNotFoundByUsername,
+)
 
 __all__ = [
     'CommentNotFoundById',
